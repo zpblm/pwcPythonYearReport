@@ -7,3 +7,4 @@
 2.downloadPDF.py 用于根据上一步得到的Excel来下载PDF
 
 3.convertTxt.py 用于将PDF文件转为TXT，并且从中截取包含‘管理层讨论与分析’‘公司治理’的页面的段落
+  若是纯图片的话，将文件名称存放于img_files.txt中
