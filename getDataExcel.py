@@ -22,7 +22,7 @@ def get_json(pageNum, s):
     :param s:session
     :return: json data
 
-        'seDate': '2022-10-31~2023-04-10', （大概有95页）
+        'seDate': '2022-12-31~2023-04-10', （大概有95页）
         'seDate': '2023-04-11~2023-04-30',  (4.10日之前都是一样的，每次从4.5-4.30爬取就可以了)
 
     """
@@ -89,8 +89,14 @@ data_drop_em = raw_data.copy()
 data_drop_em.loc[:, 'announcementTitle'] = data_drop_em.loc[:, 'announcementTitle'].apply(lambda c: drop_em(c))
 
 data_drop_em.head()
+# 将时间戳转化为日期
+def transform_date(timeStamp):
+    timeStamp = int(str(timeStamp)[:-3])
+    timeArray = time.localtime(timeStamp)
+    return time.strftime("%Y-%m-%d", timeArray)
 
 data_time_transformed = data_drop_em.copy()
+data_time_transformed.loc[:, 'announcementTime'] = data_time_transformed.loc[:, 'announcementTime'].apply(lambda c: transform_date(c))
 data_time_transformed.head()
 
 
