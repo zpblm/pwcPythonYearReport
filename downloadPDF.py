@@ -8,9 +8,11 @@ import pandas as pd
 import requests
 from concurrent.futures import ThreadPoolExecutor
 
-data = pd.read_csv('F:/pywork/2022-4-24.csv', encoding='gbk',dtype={'secCode': str})
-
-
+df = pd.read_csv('F:/pywork/深沪京2022年报1.csv', encoding='gbk',dtype={'secCode': str})
+# 按日期降序排序
+df = df.sort_values(['announcementTime'], ascending=False)
+# 以最新年报作为结果
+df = df.groupby(['secName']).agg('first').reset_index()
 
 def get_announcement(s, url, secName):
     try:
@@ -25,8 +27,8 @@ def get_announcement(s, url, secName):
 
 
 os.chdir("年报PDF")
-url = data.loc[:, "adjunctUrl"]
-secName = data.loc[:, "announcementTitle"]
+url = df.loc[:, "adjunctUrl"]
+secName = df.loc[:, "announcementTitle"]
 
 with ThreadPoolExecutor(max_workers=8) as pool:
     with requests.Session() as s:

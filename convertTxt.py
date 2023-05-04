@@ -2,6 +2,7 @@
 import pdfplumber
 import os
 from concurrent.futures import ThreadPoolExecutor
+import shutil
 
 file_dir = r'F:\pywork\年报PDF'  # 需要遍历的文件夹路径
 file_list = []
@@ -60,6 +61,7 @@ def convert_txt(file):
         if len(str(text).strip()) > 10:
             text_all.append(text)
     pdf.close()
+    shutil.move(file_dir + '\\' + file, "F:\\pywork\\处理完毕PDF")
     if len(text_all) > 1:
         text_all = ''.join(text_all)
         text_file = open(str(file).replace('.pdf', '') + "-全文.txt", 'a', encoding='utf-8')

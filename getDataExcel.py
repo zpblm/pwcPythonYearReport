@@ -22,9 +22,10 @@ def get_json(pageNum, s):
     :param s:session
     :return: json data
 
-        'seDate': '2022-12-31~2023-04-10', （大概有95页）
-        'seDate': '2023-04-11~2023-04-30',  (4.10日之前都是一样的，每次从4.5-4.30爬取就可以了)
-
+        'seDate': '2022-12-31~2023-04-10', 95页
+        'seDate': '2023-04-11~2023-04-23', 90页
+        'seDate': '2023-04-24~2023-04-27', 97页
+        'seDate': '2023-04-28~2023-05-30', 76页
     """
 
     params = {
@@ -32,9 +33,10 @@ def get_json(pageNum, s):
         'column': 'szse',
         'tabName': 'fulltext',
         'category': 'category_ndbg_szsh',
-        'seDate': '2023-04-11~2023-04-30',
+        'seDate': '2022-12-31~2023-05-30',
         'isHLtitle': 'true'
     }
+
     params['pageNum'] = str(pageNum)
     try:
         res = s.post(url, headers=headers, params=params)
@@ -77,7 +79,7 @@ raw_data = res_df.drop(
     columns=['id', 'announcementId', 'adjunctSize', 'adjunctType', 'storageTime', 'columnId', 'pageColumn',
              'secNameList',
              'announcementType', 'associateAnnouncement', 'important', 'batchNum', 'orgName', 'announcementTypeName',
-             'announcementContent', 'announcementTime', 'tileSecName', 'shortTitle'],
+             'announcementContent', 'tileSecName', 'shortTitle'],
 )
 
 
@@ -110,4 +112,4 @@ data_url_joined.loc[:, 'adjunctUrl'] = data_url_joined.loc[:, 'adjunctUrl'].appl
 data_url_joined.head()
 
 # 巨潮网只能一次爬取100页（3000条左右），所以请根据时间段，分别爬取2个CSV文件深沪京2022年报1.csv和深沪京2022年报2.csv，然后手动将其合并成一个
-data_url_joined.to_csv('F:/pywork/深沪京2022年报2.csv', index=False, encoding='utf_8_sig')
+data_url_joined.to_csv('F:/pywork/深沪京2022年报99.csv', index=False, encoding='utf_8_sig')
