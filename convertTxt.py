@@ -27,7 +27,7 @@ for files in os.walk(file_dir):  # 遍历文件夹及其下的所有子文件夹
 def convert_txt(file):
     pdf = pdfplumber.open(file_dir + '\\' + file)
     pages = pdf.pages
-
+    print('开始分析'+str(file))
     text_all = []  # 全文
     text_1 = []  # 管理层讨论与分析
     text_2 = []  # 公司治理
@@ -46,7 +46,7 @@ def convert_txt(file):
         if '公司治理' in text and page.page_number > page_start1 + 1 and page_start1 > 5 and page_end1 == 0 and page_start2 == 0:
             page_end1 = page.page_number - 1
             page_start2 = page.page_number
-        if '环境与社会责任' in text and page.page_number > page_start2 + 1 and page_end2 == 0 and page_start2 > 5:
+        if ('环境与社会责任' in text or '环境与社会责任' in text) and page.page_number > page_start2 + 1 and page_end2 == 0 and page_start2 > 5:
             page_end2 = page.page_number - 1
         if page_start1 > 5 and page_start2 > 5 and page_end1 > 5 and page_end2 > 5:
             text_1 = ''.join(text_1)
@@ -57,23 +57,25 @@ def convert_txt(file):
             text_file2 = open(str(file).replace('.pdf', '') + "-公司治理.txt", 'a', encoding='utf-8')
             text_file2.write(text_2)
             print(str(file) + '----公司治理 截取成功！')
+            text_all = ['skip']
             break
         if len(str(text).strip()) > 10:
             text_all.append(text)
     pdf.close()
     shutil.move(file_dir + '\\' + file, "F:\\pywork\\处理完毕PDF")
+    print(str(len(text_all)))
     if len(text_all) > 1:
         text_all = ''.join(text_all)
         text_file = open(str(file).replace('.pdf', '') + "-全文.txt", 'a', encoding='utf-8')
         text_file.write(text_all)
         print(str(file) + '----全文保存成功！')
-    else:
+    elif len(text_all) < 1:
         file_name = ''.join(file).replace('.pdf', '') + ','
         text_file = open("img_files.txt",'a', encoding='utf-8')
         text_file.write(file_name)
         print(str(file) + '----纯图片，已记录！')
 
 
-os.chdir('年报TXT')
+os.chdir('F:\pywork\年报TXT')
 with ThreadPoolExecutor(max_workers=8) as pool:
     futures = [pool.submit(convert_txt, file) for file in file_list]
