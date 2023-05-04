@@ -46,7 +46,7 @@ def convert_txt(file):
         if '公司治理' in text and page.page_number > page_start1 + 1 and page_start1 > 5 and page_end1 == 0 and page_start2 == 0:
             page_end1 = page.page_number - 1
             page_start2 = page.page_number
-        if ('环境与社会责任' in text or '环境与社会责任' in text) and page.page_number > page_start2 + 1 and page_end2 == 0 and page_start2 > 5:
+        if ('环境与社会责任' in text or '环境和社会责任' in text) and page.page_number > page_start2 + 1 and page_end2 == 0 and page_start2 > 5:
             page_end2 = page.page_number - 1
         if page_start1 > 5 and page_start2 > 5 and page_end1 > 5 and page_end2 > 5:
             text_1 = ''.join(text_1)
